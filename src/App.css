@@ -1,0 +1,40 @@
+@import '~antd/dist/antd.css';
+
+.strength-password {
+    position: absolute;
+    width: 0%;
+    height: 5px;
+    bottom: 56.3%;
+    left: 25.3%;
+    background: transparent;
+  }
+  
+  .strength-password[data-score="null"] {
+    width: 0;
+    background: red;
+  }
+  
+  .strength-password[data-score="0"] {
+    width: 5%;
+    background: #f44336;
+  }
+  
+  .strength-password[data-score="1"] {
+    width: 20%;
+    background: #f44336;
+  }
+  
+  .strength-password[data-score="2"] {
+    width: 30%;
+    background: #ffeb3b;
+  }
+  
+  .strength-password[data-score="3"] {
+    width: 50%;
+    background: #4caf50;
+  }
+  
+  .strength-password[data-score="4"] {
+    width: 70%;
+    background: #4caf50;
+  }

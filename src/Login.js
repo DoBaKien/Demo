@@ -1,6 +1,6 @@
 import { Container } from "@mui/material";
 import Typography from '@mui/material/Typography';
-import { Button, TextField, Box, Snackbar} from '@mui/material';
+import { Button, TextField, Box, Snackbar } from '@mui/material';
 import { useState } from 'react'
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -20,27 +20,33 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        axios.post('login', {
-            "username": userName,
-            "password": password
-        }).then(
-            res => {
-                console.log(res);
-                setOpen(true)
-            }
-        ).catch(
-            err => {
-                console.log(err);
-                setOpenError(true)
-            }
-        )
+        if (userName === "") {
+            console.log("a");
+        } else if (password === "") {
+            console.log("b");
+        } else {
+            axios.post('login', {
+                "username": userName,
+                "password": password
+            }).then(
+                res => {
+                    console.log(res);
+                    setOpen(true)
+                }
+            ).catch(
+                err => {
+                    console.log(err);
+                    setOpenError(true)
+                }
+            )
+        }
     }
     const handleClose = () => {
         setOpen(false);
         setOpenError(false)
     };
 
-    return (  
+    return (
         <Container>
             <Typography variant='h3' align='center' gutterBottom>
                 Login
@@ -49,23 +55,23 @@ function Login() {
                 <Box pb={2}>
                     <TextField label='User Name' variant='standard' fullWidth
                         onChange={(e) => setUserName(e.target.value)} />
-                  
-                        <TextField
-                            label="Password"
-                            type={showPass ? "text" : "password"}
-                            fullWidth
-                            variant='standard'
-                            onChange={(e)=> setPassword(e.target.value)}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <IconButton onClick={() => setShowPass(!showPass)}>
-                                            {showPass ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
+
+                    <TextField
+                        label="Password"
+                        type={showPass ? "text" : "password"}
+                        fullWidth
+                        variant='standard'
+                        onChange={(e) => setPassword(e.target.value)}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton onClick={() => setShowPass(!showPass)}>
+                                        {showPass ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                                    </IconButton>
+                                </InputAdornment>
+                            )
+                        }}
+                    />
                 </Box>
                 <Button type='submit' variant='contained' startIcon={<SendIcon />}>Submit</Button>
             </form >

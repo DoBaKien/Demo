@@ -10,9 +10,13 @@ import IconButton from '@mui/material/IconButton';
 import Alert from '@mui/material/Alert';
 import axios from 'axios'
 
+var regUserName = /^[a-zA-Z0-9]{6,16}$/
+var regpass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 function Login() {
     const [userName, setUserName] = useState('')
+    const [userNameError, setUserNameError] = useState(false)
     const [password, setPassword] = useState('')
+    const [passwordError, setPasswordError] = useState(false)
     const [open, setOpen] = useState(false);
     const [openError, setOpenError] = useState(false);
     const [showPass, setShowPass] = useState(false);
@@ -21,9 +25,9 @@ function Login() {
         e.preventDefault()
 
         if (userName === "") {
-            console.log("a");
+            setUserNameError(true)
         } else if (password === "") {
-            console.log("b");
+            setPasswordError(true)
         } else {
             axios.post('login', {
                 "username": userName,
@@ -41,6 +45,27 @@ function Login() {
             )
         }
     }
+
+    const handleChangleUserName =(e)=>{
+        if(regUserName.test(e)){
+            setUserName(e)
+            setUserNameError(false)
+        }else{
+            setUserName("")
+            setUserNameError(true)
+        }
+    }
+
+    const handleChanglePassword =(e)=>{
+        if(regpass.test(e)){
+            setPassword(e)
+            setPasswordError(false) 
+        }else{
+            setPassword("")
+            setPasswordError(true)
+        }
+    }
+
     const handleClose = () => {
         setOpen(false);
         setOpenError(false)
@@ -54,14 +79,16 @@ function Login() {
             <form noValidate autoComplete='off' onSubmit={handleSubmit}>
                 <Box pb={2}>
                     <TextField label='User Name' variant='standard' fullWidth
-                        onChange={(e) => setUserName(e.target.value)} />
+                        onChange={(e) => handleChangleUserName(e.target.value)} 
+                        error={userNameError}/>
 
                     <TextField
                         label="Password"
                         type={showPass ? "text" : "password"}
                         fullWidth
+                        error={passwordError}
                         variant='standard'
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => handleChanglePassword(e.target.value)}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end">

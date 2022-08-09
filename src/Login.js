@@ -1,13 +1,13 @@
 import { Container } from "@mui/material";
 import Typography from '@mui/material/Typography';
-import { Button, TextField, Box, Snackbar } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import { useState } from 'react'
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import Alert from '@mui/material/Alert';
+import swal from 'sweetalert';
 import axios from 'axios'
 
 var regUserName = /^[a-zA-Z0-9]{6,16}$/
@@ -17,17 +17,21 @@ function Login() {
     const [userNameError, setUserNameError] = useState(false)
     const [password, setPassword] = useState('')
     const [passwordError, setPasswordError] = useState(false)
-    const [open, setOpen] = useState(false);
-    const [openError, setOpenError] = useState(false);
     const [showPass, setShowPass] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
-        if (userName === "") {
+        if(userName===""&& password ===""){
             setUserNameError(true)
+            setPasswordError(true)
+            swal("Error!", "Please enter your account!", "error");
+        }
+        else if (userName === "") {
+            setUserNameError(true)
+            swal("Error!", "Please enter a your username!", "error");
         } else if (password === "") {
             setPasswordError(true)
+            swal("Error!", "Please enter a your password!", "error");
         } else {
             axios.post('login', {
                 "username": userName,
@@ -35,12 +39,12 @@ function Login() {
             }).then(
                 res => {
                     console.log(res);
-                    setOpen(true)
+                    swal("Welcome!", `Hi ${userName}`, "success");
                 }
             ).catch(
                 err => {
                     console.log(err);
-                    setOpenError(true)
+                    swal("Error!", "Please enter !", "error");
                 }
             )
         }
@@ -65,11 +69,6 @@ function Login() {
             setPasswordError(true)
         }
     }
-
-    const handleClose = () => {
-        setOpen(false);
-        setOpenError(false)
-    };
 
     return (
         <Container>
@@ -103,16 +102,6 @@ function Login() {
                 <Button type='submit' variant='contained' startIcon={<SendIcon />}>Submit</Button>
             </form >
 
-            <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-                <Alert severity="success" sx={{ width: "100%" }}>
-                    Success!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openError} autoHideDuration={1500} onClose={handleClose}>
-                <Alert severity="error" sx={{ width: "100%" }}>
-                    Wrong user name or password
-                </Alert>
-            </Snackbar>
         </Container>
     );
 }

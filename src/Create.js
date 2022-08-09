@@ -1,13 +1,13 @@
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container'
-import { Button, TextField, Box, RadioGroup, FormControlLabel, Radio, FormHelperText, Snackbar, Tooltip } from '@mui/material';
+import { Button, TextField, Box, RadioGroup, FormControlLabel, Radio, FormHelperText, Tooltip } from '@mui/material';
 import { useState } from 'react'
 import SendIcon from '@mui/icons-material/Send';
 import InputAdornment from '@mui/material/InputAdornment';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import Alert from '@mui/material/Alert';
+import swal from 'sweetalert';
 import axios from 'axios'
 
 var zxcvbn = require("zxcvbn")
@@ -16,9 +16,6 @@ var regpass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 var regUserName = /^[a-zA-Z0-9]{6,16}$/
 
 function Create() {
-    const [open, setOpen] = useState(false);
-    const [openError, setOpenError] = useState(false);
-    const [openErrorPass, setOpenErrorPass] = useState(false);
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [userName, setUserName] = useState('')
@@ -28,16 +25,14 @@ function Create() {
     const [userNameError, setUserNameError] = useState(false)
     const [emailError, setEmailError] = useState(false)
     const [passError, setPassError] = useState(false)
+    const [showPass, setShowPass] = useState(false);
+   
+    const [score, setScore] = useState("null");
+    const [scoreText, setScoreText] = useState("");
     // const { createUser } = useContext(UserContext)
-
-    const handleClose = () => {
-        setOpen(false);
-        setOpenError(false);
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault()
-
         axios.post('register', {
             "name": name,
             "email": email,
@@ -46,48 +41,51 @@ function Create() {
         }).then(
             res => {
                 console.log(res);
-                setOpen(true)
+                swal("Success!", "You have successfully registered!", "success");
             }
         ).catch(
             err => {
                 console.log(err);
-                if (name === "") {
+                if(name==="" && userName==="" && email==="" &password===""){
                     setNameError(true)
-                } else if (email === "") {
                     setEmailError(true)
-                    setOpenError(true)
+                    setPassError(true)
+                    setUserNameError(true)
+                    swal("Error!", "Please enter all value", "error");
                 }
-                else if (password === '')
-                    setOpenErrorPass(true)
+                else if (name === "") {
+                    swal("Error!", "Please enter a your name", "error");
+                    setNameError(true)
+                } else if(userName==="") {
+                    swal("Error!", "Please enter a valid username", "error");
+                    setUserNameError(true)
+                }
+                else if (email === "") {
+                    setEmailError(true)
+                    swal("Error!", "Please enter a valid email!", "error");
+                }
+                else if (password === '') {
+                    setPassError(true)
+                    swal("Error!", "Please enter a valid password!", "error");
+                }
             }
         )
     }
 
-    // const handleSubmit = (e) => {
-    //     e.preventDefault()
-    //     if (name && email && userName && password) {
-    //         createUser({ name, userName, email, password, gender })
-    //         console.log(name, userName, email, password, gender);
-    //         setOpen(true)
-    //     } else if (name === "") {
-    //         setNameError(true)
-    //     } else if (email === "") {
-    //         setEmailError(true)
-    //         setOpenError(true)
-    //     }
-    //     else if (password === '')
-    //         setOpenErrorPass(true)
-    // }
-
     const handleChangleName = (e) => {
-        setName(e)
-        setNameError(false)
+        if (e === "") {
+            setName("")
+            setNameError(true)
+        } else {
+            setName(e)
+            setNameError(false)
+        }
     }
 
     const handleChangleEmail = (e) => {
         if (e === "")
             setEmail("")
-        setEmailError(true)
+            setEmailError(true)
         if (regemail.test(e)) {
             setEmailError(false)
             setEmail(e)
@@ -113,15 +111,12 @@ function Create() {
 
     }
 
-    const [showPass, setShowPass] = useState(false);
-    const [score, setScore] = useState("null");
-    const [scoreText, setScoreText] = useState("");
+   
 
     const testStrengthPassword = (e) => {
         const pass1 = e.target.value
         if (regpass.test(pass1)) {
             setPassword(e.target.value)
-            setOpenErrorPass(false)
             setPassError(false)
         }
         else {
@@ -163,7 +158,8 @@ function Create() {
                         error={userNameError} />
                     <TextField label='Email' variant='standard' fullWidth required
                         onChange={(e) => handleChangleEmail(e.target.value)}
-                        error={emailError} />
+                        error={emailError} 
+                       />
 
                     <Tooltip title="Minimum eight characters, at least one letter and one number" placement="bottom">
                         <TextField
@@ -201,21 +197,6 @@ function Create() {
                 <Button type='submit' variant='contained' startIcon={<SendIcon />}>Submit</Button>
             </form >
 
-            <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
-                <Alert severity="success" sx={{ width: "100%" }}>
-                    Success!
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openError} autoHideDuration={1500} onClose={handleClose}>
-                <Alert severity="error" sx={{ width: "100%" }}>
-                    Please  enter a valid email address
-                </Alert>
-            </Snackbar>
-            <Snackbar open={openErrorPass} autoHideDuration={1500} onClose={handleClose}>
-                <Alert severity="error" sx={{ width: "100%" }}>
-                    Your password must be at least 8 characters long. Please try another.
-                </Alert>
-            </Snackbar>
         </Container>
 
 

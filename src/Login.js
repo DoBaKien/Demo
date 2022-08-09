@@ -44,7 +44,7 @@ function Login() {
             ).catch(
                 err => {
                     console.log(err);
-                    swal("Error!", "Please enter !", "error");
+                    swal("Error!", "Wrong username or password!", "error");
                 }
             )
         }

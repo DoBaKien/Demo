@@ -26,50 +26,54 @@ function Create() {
     const [emailError, setEmailError] = useState(false)
     const [passError, setPassError] = useState(false)
     const [showPass, setShowPass] = useState(false);
-   
+
     const [score, setScore] = useState("null");
     const [scoreText, setScoreText] = useState("");
     // const { createUser } = useContext(UserContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post('register', {
-            "name": name,
-            "email": email,
-            "username": userName,
-            "password": password
-        }).then(
-            res => {
-                console.log(res);
-                swal("Success!", "You have successfully registered!", "success");
-            }
-        ).catch(
-            err => {
-                console.log(err);
-                if(name==="" && userName==="" && email==="" &password===""){
-                    setNameError(true)
-                    setEmailError(true)
-                    setPassError(true)
-                    setUserNameError(true)
-                    swal("Error!", "Please enter all value", "error");
+        if (name === "" && userName === "" && email === "" & password === "") {
+            setNameError(true)
+            setEmailError(true)
+            setPassError(true)
+            setUserNameError(true)
+            swal("Error!", "Please enter all value", "error");
+        }
+        else if (name === "") {
+            swal("Error!", "Please enter a your name", "error");
+            setNameError(true)
+        } 
+        else if (userName === "") {
+            swal("Error!", "Please enter a valid username", "error");
+            setUserNameError(true)
+        }
+        else if (email === "") {
+            setEmailError(true)
+            swal("Error!", "Please enter a valid email!", "error");
+        }
+        else if (password === '') {
+            setPassError(true)
+            swal("Error!", "Please enter a valid password!", "error");
+        } 
+        else {
+            axios.post('register', {
+                "name": name,
+                "email": email,
+                "username": userName,
+                "password": password
+            }).then(
+                res => {
+                    console.log(res);
+                    swal("Success!", "You have successfully registered!", "success");
                 }
-                else if (name === "") {
-                    swal("Error!", "Please enter a your name", "error");
-                    setNameError(true)
-                } else if(userName==="") {
-                    swal("Error!", "Please enter a valid username", "error");
-                    setUserNameError(true)
+            ).catch(
+                err => {
+                    console.log(err);
+                    swal("Error!", "Server error", "error");
                 }
-                else if (email === "") {
-                    setEmailError(true)
-                    swal("Error!", "Please enter a valid email!", "error");
-                }
-                else if (password === '') {
-                    setPassError(true)
-                    swal("Error!", "Please enter a valid password!", "error");
-                }
-            }
-        )
+            )
+        }
     }
 
     const handleChangleName = (e) => {
@@ -85,7 +89,7 @@ function Create() {
     const handleChangleEmail = (e) => {
         if (e === "")
             setEmail("")
-            setEmailError(true)
+        setEmailError(true)
         if (regemail.test(e)) {
             setEmailError(false)
             setEmail(e)
@@ -111,7 +115,7 @@ function Create() {
 
     }
 
-   
+
 
     const testStrengthPassword = (e) => {
         const pass1 = e.target.value
@@ -158,8 +162,8 @@ function Create() {
                         error={userNameError} />
                     <TextField label='Email' variant='standard' fullWidth required
                         onChange={(e) => handleChangleEmail(e.target.value)}
-                        error={emailError} 
-                       />
+                        error={emailError}
+                    />
 
                     <Tooltip title="Minimum eight characters, at least one letter and one number" placement="bottom">
                         <TextField

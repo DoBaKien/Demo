@@ -8,17 +8,19 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import swal from 'sweetalert';
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 var regUserName = /^[a-zA-Z0-9]{6,16}$/
 var regpass = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 function Login() {
+    const navigate = useNavigate()
     const [userName, setUserName] = useState('')
     const [userNameError, setUserNameError] = useState(false)
     const [password, setPassword] = useState('')
     const [passwordError, setPasswordError] = useState(false)
     const [showPass, setShowPass] = useState(false);
-
+ 
     const handleSubmit = (e) => {
         e.preventDefault()
         if(userName===""&& password ===""){
@@ -39,7 +41,9 @@ function Login() {
             }).then(
                 res => {
                     console.log(res);
-                    swal("Welcome!", `Hi ${userName}`, "success");
+                    swal("Welcome!", `Hi ${userName}`, "success")
+                    localStorage.setItem('token', res.data.accessToken)
+                    navigate('/table')
                 }
             ).catch(
                 err => {

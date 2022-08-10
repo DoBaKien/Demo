@@ -57,6 +57,7 @@ function Create() {
             swal("Error!", "Please enter a valid password!", "error");
         } 
         else {
+            console.log(name,email,userName,password);
             axios.post('register', {
                 "name": name,
                 "email": email,

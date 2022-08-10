@@ -1,23 +1,20 @@
 import './App.css';
-import { Routes, Route, Link } from 'react-router-dom'
-import { Menu } from 'antd';
 import { Box, Grid } from '@mui/material';
 import Home from "./Home"
 import Create from './Create';
 import Table from './Table';
+import { Routes, Route, Link } from 'react-router-dom'
+import { Menu } from 'antd';
 import { styled } from '@mui/system'
-import { UserProvider} from './UserContext'
-import AddMember from './AddMember';
 import Login from './Login';
 
 function App() {
-  const MyDiv= styled('div')({
+  const MyDiv = styled('div')({
     backgroundColor: '#01a9fe',
     border: "1px",
     padding: 10,
-    height:"50px",
-})
-
+    height: "50px",
+  })
   const menuItems = [
     {
       key: 'home',
@@ -27,11 +24,7 @@ function App() {
     },
     {
       key: 'table',
-      label: (<Link to="/table">Table</Link>),
-    },
-    {
-      label: (<Link to="/add">Add Member</Link>),
-      key: 'add',
+      label: (<Link to="/table" onClick={(e)=>{console.log(e.target.value)}}>Table</Link>),
     },
     {
       label: (<Link to="/register">Register</Link>),
@@ -45,7 +38,6 @@ function App() {
 
 
   return (
-    <UserProvider>
       <div className="App">
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={2}>
@@ -60,7 +52,6 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/table" element={<Table />} />
                 <Route path="/register" element={<Create />} />
-                <Route path="/add" element={<AddMember />} />
                 <Route path="/login" element={<Login />} />
               </Routes>
             </Grid>
@@ -72,8 +63,8 @@ function App() {
           </Grid>
         </Box>
       </div >
-    </UserProvider>
   );
 }
+
 
 export default App;

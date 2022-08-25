@@ -35,7 +35,7 @@ function Login() {
             setPasswordError(true)
             swal("Error!", "Please enter a your password!", "error");
         } else {
-            axios.post('login', {
+            axios.post('auth/login', {
                 "username": userName,
                 "password": password
             }).then(

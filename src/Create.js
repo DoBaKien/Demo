@@ -58,7 +58,7 @@ function Create() {
         } 
         else {
             console.log(name,email,userName,password);
-            axios.post('register', {
+            axios.post('auth/register', {
                 "name": name,
                 "email": email,
                 "username": userName,
